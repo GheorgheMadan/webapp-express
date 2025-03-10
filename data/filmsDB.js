@@ -3,10 +3,10 @@ const mySql = require('mysql2')
 
 // Creo la connessione al database con le mie credenziali
 const connection = mySql.createConnection({
-    host: 'localhost',               // Questo è l'indirizzo del database (locale in questo caso)
-    user: 'root',                    // Il mio nome utente per accedere a MySQL
-    password: 'mySQL@Madan.com123',  // La mia password per l'accesso
-    database: 'movies_db'            // Il nome del database a cui voglio connettermi
+    host: process.env.DB_HOST || 'localhost',               // Questo è l'indirizzo del database (locale in questo caso)
+    user: process.env.DB_USER || 'root',                    // Il mio nome utente per accedere a MySQL
+    password: process.env.DB_PASS || 'mySQL@Madan.com123',  // La mia password per l'accesso
+    database: process.env.DB_NAME || 'movies_db'            // Il nome del database a cui voglio connettermi
 })
 
 // Mi collego al database 

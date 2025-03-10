@@ -1,7 +1,7 @@
 
 const express = require('express'); // Importiamo il modulo Express
 const app = express(); // Creiamo un'applicazione Express
-const port = 3000; // Definiamo la porta su cui il server ascolterà le richieste
+const port = process.env.PORT; // Definiamo la porta su cui il server ascolterà le richieste
 const router = require('./routers/moviesRouters') // importo la rotta dei film 
 
 // importazione dei middleware 
