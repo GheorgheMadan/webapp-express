@@ -28,13 +28,13 @@ function show(req, res) {
     const { id } = req.params
 
     // preparo la query che richiama un film in base all'id  
-    const moviesSql = "SELECT * FROM movies WHERE id = ?"
+    const movieSql = "SELECT * FROM movies WHERE id = ?"
 
     // Eseguo la query per ottenere il film
     const reviewSql = `SELECT * FROM reviews WHERE movie_id = ? `
 
     // Eseguo la query per ottenere il film
-    connection.query(moviesSql, [id], (err, movieResults) => {
+    connection.query(movieSql, [id], (err, movieResults) => {
         if (err) return res.status(500).json({ error: 'Data query failed' }) // Gestione errore query
         if (movieResults.length === 0) res.status(404).json({ error: 'Movie Not Found' }) // Gestione film non trovato
 
@@ -45,10 +45,12 @@ function show(req, res) {
         }
 
         // Eseguo la query per ottenere le recensioni del film
-        connection.query(reviewSql, [id], (err, reviewResults) => {
-            if (err) return res.status(500).json({ err: 'Data Query failed' })  // Gestione errore query
+        connection.query(reviewSql, [id], (err, reviewResult) => {
+            // se la query non va a buon fine invio un errore 
+            if (err) return res.status(500).json({ err: 'Data Query failed' })
 
-            movie.review = reviewResults[0] // Aggiungo le recensioni all'oggetto del film
+            // aggiorniamo l'oggetto movie con le review ritornate
+            movie.reviews = reviewResult // Aggiungo le recensioni all'oggetto del film
 
             res.json(movie) // Invio il film con le recensioni come risposta
 
