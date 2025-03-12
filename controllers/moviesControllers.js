@@ -36,7 +36,9 @@ function show(req, res) {
     // Eseguo la query per ottenere il film
     connection.query(movieSql, [id], (err, movieResults) => {
         if (err) return res.status(500).json({ error: 'Data query failed' }) // Gestione errore query
-        if (movieResults.length === 0) res.status(404).json({ error: 'Movie Not Found' }) // Gestione film non trovato
+        // console.log(movieResults);
+        if (movieResults.length === 0) return res.status(404).json({ error: 'Movie Not Found' }) // Gestione film non trovato
+
 
         // modifico movie aggiungendo il percorso completo dell'immagine
         const movie = {
