@@ -30,7 +30,7 @@ function show(req, res) {
     // preparo la query che richiama un film in base all'id  
     const movieSql = "SELECT * FROM movies WHERE id = ?"
 
-    // Eseguo la query per ottenere il film
+    // Eseguo la query per ottenere il film selezionando il film in base all'id
     const reviewSql = `SELECT * FROM reviews WHERE movie_id = ? `
 
     // Eseguo la query per ottenere il film
@@ -58,8 +58,32 @@ function show(req, res) {
 
         })
     })
+}
+
+// Funzione CREATE per creare una nuova recensione per un film
+function createReview(req, res) {
+
+    // Estraggo l'id del film a cui aggiungeremo la recensione
+    const { id } = req.params
+
+    // Destrutturo gli elementi che verranno inseriti nella recensione tramite il form di frontend
+    const { name, vote, text } = req.body
+
+    // Preaparo la query per inserire una nuova recensione nel database 
+    const sqlReview = "INSERT INTO reviews (text, vote, name, movie_id) VALUES (?, ?, ?, ?)"
+
+    // Eseguo la query per inserire la recensione inviando i dati estratti dal form di frontend
+    connection.query(sqlReview, [text, vote, name, id], (err, results) => {
+        // Se la query non va a buon fine inio un messagio di errore 
+        if (err) return res.status(500).json({ error: 'Database query failed' })
+        res.status(201);
+        // Invio un messaggio di conferma che la recensione è stata creata con successo
+        res.json({ message: 'Review added', id: results.insertId }) // Invio un messaggio di conferma che la recensione è stata creata con successo
+        // insertId è l'id della recensione appena creata per poterla visualizzare. 
+    })
 
 }
 
+
 // Esporto le funzioni per poterle usare in altri file
-module.exports = { index, show }
+module.exports = { index, show, createReview }
