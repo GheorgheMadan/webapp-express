@@ -28,7 +28,7 @@ app.get('/api', (req, res) => {
 });
 
 // definisco la parte iniziale delle rotte 
-app.use('/api', router)
+app.use('/api/movies', router)
 
 // Middleware per la gestione degli errori del server (errore 500)
 app.use(errorsHandler.errorsHandler)

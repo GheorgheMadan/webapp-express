@@ -79,11 +79,36 @@ function createReview(req, res) {
         res.status(201);
         // Invio un messaggio di conferma che la recensione è stata creata con successo
         res.json({ message: 'Review added', id: results.insertId }) // Invio un messaggio di conferma che la recensione è stata creata con successo
-        // insertId è l'id della recensione appena creata per poterla visualizzare. 
+        // insertId è l'id della recensione appena creata per poterla visualizzare. 01
+
+
+    })
+
+}
+
+// FUNZIONE STORE per creare un nuovo FILM 
+function createFilm(req, res, next) {
+
+    // Estraggo il nome del file caricato  tramite Multer
+    const imageName = `${req.file.filename}`
+
+    // Destrutturo gli elementi che verranno inseriti nel film tramite il form di frontend
+    const { title, director, genre, release_year, abstract } = req.body
+
+    // Preparo la query per inserire un nuovo film nel database
+    const sql = "INSERT INTO movies (title, director, genre, release_year, abstract, image) VALUES (?, ?, ?, ?, ?, ?)"
+
+    // Eseguo la query per inserire il film inviando i dati estratti dal form al database 
+    connection.query(sql, [title, director, genre, release_year, abstract, imageName], (err, results) => {
+        // Se la query non va a buon fine invio un messaggio di errore 
+        if (err) return res.status(500).json({ error: 'Database query failed' })
+
+        // Invio un messaggio di conferma che il film è stato creato con successo
+        res.status(201).json({ message: 'Film added', status: 'success' })
     })
 
 }
 
 
 // Esporto le funzioni per poterle usare in altri file
-module.exports = { index, show, createReview }
+module.exports = { index, show, createReview, createFilm }
